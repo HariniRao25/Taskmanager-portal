@@ -12,16 +12,29 @@ connectDB();
 const app = express();
 const server = http.createServer(app);
 
+// Allow localhost (dev), any ngrok tunnel, and an optional explicit CLIENT_URL.
+const allowedOrigin = (origin, callback) => {
+  if (
+    !origin || // non-browser clients (curl, mobile) send no Origin
+    /^https?:\/\/localhost(:\d+)?$/.test(origin) ||
+    /\.ngrok(-free)?\.(app|dev|io)$/.test(origin) ||
+    (process.env.CLIENT_URL && origin === process.env.CLIENT_URL)
+  ) {
+    return callback(null, true);
+  }
+  return callback(new Error(`Not allowed by CORS: ${origin}`));
+};
+
 const io = new Server(server, {
   cors: {
-    origin: 'http://localhost:3000',
+    origin: allowedOrigin,
     methods: ['GET', 'POST', 'PUT', 'DELETE'],
     credentials: true
   }
 });
 
 // Middleware
-app.use(cors({ origin: 'http://localhost:3000', credentials: true }));
+app.use(cors({ origin: allowedOrigin, credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -53,6 +66,19 @@ app.use('/api/reports', require('./routes/reports'));
 
 // Health check
 app.get('/api/health', (req, res) => res.json({ status: 'OK', timestamp: new Date() }));
+
+// Serve the built frontend from the same origin (single-tunnel deploy).
+// Run `npm run build` in ../frontend first. Falls back silently if not built.
+const path = require('path');
+const fs = require('fs');
+const clientBuild = path.join(__dirname, '..', 'frontend', 'build');
+if (fs.existsSync(clientBuild)) {
+  app.use(express.static(clientBuild));
+  // Any non-API route serves the React app (client-side routing).
+  app.get(/^\/(?!api).*/, (req, res) =>
+    res.sendFile(path.join(clientBuild, 'index.html'))
+  );
+}
 
 // Error Handler
 app.use(errorHandler);

@@ -108,7 +108,7 @@ export default function Reports() {
       <div className="grid-2" style={{ marginBottom: 20 }}>
         {/* Task by Status */}
         <div className="chart-wrapper">
-          <div className="chart-title">📊 Task Status Breakdown</div>
+          <div className="chart-title">Task Status Breakdown</div>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={taskByStatus} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
               <XAxis dataKey="status" tick={{ fontSize: 11, fill: '#64748b' }} tickFormatter={v => v.replace('_', ' ')} />
@@ -125,7 +125,7 @@ export default function Reports() {
 
         {/* Task by Priority */}
         <div className="chart-wrapper">
-          <div className="chart-title">🎯 Task Priority Distribution</div>
+          <div className="chart-title">Task Priority Distribution</div>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
               <Pie data={taskByPriority?.filter(d => d.count > 0)} cx="50%" cy="50%" outerRadius={90} dataKey="count" nameKey="priority" label={({ priority, count }) => count > 0 ? `${priority}: ${count}` : ''} labelLine={false}>
@@ -143,7 +143,7 @@ export default function Reports() {
       <div className="grid-2" style={{ marginBottom: 20 }}>
         {/* Incident by Severity */}
         <div className="chart-wrapper">
-          <div className="chart-title">🚨 Incident Severity Distribution</div>
+          <div className="chart-title">Incident Severity Distribution</div>
           <ResponsiveContainer width="100%" height={250}>
             <BarChart data={incidentBySeverity} margin={{ top: 5, right: 10, left: -20, bottom: 5 }}>
               <XAxis dataKey="severity" tick={{ fontSize: 11, fill: '#64748b' }} />
@@ -160,7 +160,7 @@ export default function Reports() {
 
         {/* Incident Status */}
         <div className="chart-wrapper">
-          <div className="chart-title">📋 Incident Status Overview</div>
+          <div className="chart-title">Incident Status Overview</div>
           <ResponsiveContainer width="100%" height={250}>
             <PieChart>
               <Pie data={incidentByStatus?.filter(d => d.count > 0)} cx="50%" cy="50%" innerRadius={50} outerRadius={85} dataKey="count" nameKey="status" paddingAngle={3}>
@@ -178,7 +178,7 @@ export default function Reports() {
       {/* Team Velocity */}
       {teamVelocity && teamVelocity.length > 0 && (
         <div className="chart-wrapper" style={{ marginBottom: 20 }}>
-          <div className="chart-title">⚡ Team Velocity — Tasks per Member</div>
+          <div className="chart-title">Team Velocity — Tasks per Member</div>
           <ResponsiveContainer width="100%" height={280}>
             <BarChart data={teamVelocity} margin={{ top: 5, right: 20, left: -10, bottom: 5 }}>
               <XAxis dataKey="name" tick={{ fontSize: 11, fill: '#64748b' }} />
@@ -195,7 +195,7 @@ export default function Reports() {
       {/* Project Health Table */}
       <div className="card" style={{ padding: 0 }}>
         <div style={{ padding: '20px 24px', borderBottom: '1px solid var(--border-subtle)' }}>
-          <div className="card-title">🏗️ Project Health Overview</div>
+          <div className="card-title">Project Health Overview</div>
         </div>
         <div className="table-wrapper">
           <table>

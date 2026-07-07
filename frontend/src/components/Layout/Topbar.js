@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Bell } from 'lucide-react';
+import { Bell, ArrowRight } from 'lucide-react';
 import { useNotifications } from '../../context/NotificationContext';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -107,10 +107,10 @@ export default function Topbar({ title }) {
 
               <div style={{ padding: '12px 20px', borderTop: '1px solid var(--border-subtle)', textAlign: 'center' }}>
                 <button
-                  style={{ background: 'none', border: 'none', color: 'var(--primary)', fontSize: 13, cursor: 'pointer', fontWeight: 500 }}
+                  style={{ background: 'none', border: 'none', color: 'var(--primary)', fontSize: 13, cursor: 'pointer', fontWeight: 500, display: 'inline-flex', alignItems: 'center', gap: 4 }}
                   onClick={() => { navigate('/notifications'); setShowNotifications(false); }}
                 >
-                  View all notifications →
+                  View all notifications <ArrowRight size={13} />
                 </button>
               </div>
             </div>

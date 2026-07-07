@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
-import { Eye, EyeOff, Loader } from 'lucide-react';
+import { Eye, EyeOff, Loader, Zap } from 'lucide-react';
 
 export default function Login() {
   const [form, setForm] = useState({ email: '', password: '' });
@@ -16,7 +16,7 @@ export default function Login() {
     setLoading(true);
     try {
       await login(form.email, form.password);
-      toast.success('Welcome back! 🚀');
+      toast.success('Welcome back!');
       navigate('/');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Login failed');
@@ -28,7 +28,10 @@ export default function Login() {
   return (
     <div className="auth-page">
       <div className="auth-card animate-slide-up">
-        <div className="auth-logo">⚡ TeamFlow</div>
+        <div className="auth-logo" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+          <Zap size={26} color="#818cf8" fill="#818cf8" />
+          <span>TeamFlow</span>
+        </div>
         <div className="auth-tagline">Unified Systems Engineering Platform</div>
 
         <h1 className="auth-title">Sign in to your account</h1>

@@ -63,7 +63,7 @@ export default function Dashboard() {
     <Layout title="Dashboard">
       <div className="page-header">
         <div>
-          <h1 className="page-title">Welcome back, {user?.name?.split(' ')[0]} 👋</h1>
+          <h1 className="page-title">Welcome back, {user?.name?.split(' ')[0]}</h1>
           <p className="page-subtitle">Here's what's happening across your projects today.</p>
         </div>
       </div>
@@ -159,7 +159,7 @@ export default function Dashboard() {
         {/* Open Incidents */}
         <div className="card">
           <div className="card-header">
-            <div className="card-title">🔴 Open Incidents</div>
+            <div className="card-title">Open Incidents</div>
           </div>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {incidents.map(inc => (
@@ -175,7 +175,7 @@ export default function Dashboard() {
             ))}
             {incidents.length === 0 && (
               <div style={{ textAlign: 'center', padding: 24, color: 'var(--text-muted)', fontSize: 13 }}>
-                ✅ No open incidents — all clear!
+                No open incidents — all clear!
               </div>
             )}
           </div>

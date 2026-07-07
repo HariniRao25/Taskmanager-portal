@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import toast from 'react-hot-toast';
-import { Loader } from 'lucide-react';
+import { Loader, Zap } from 'lucide-react';
 
 export default function Register() {
   const [form, setForm] = useState({ name: '', email: '', password: '', role: 'developer' });
@@ -16,7 +16,7 @@ export default function Register() {
     setLoading(true);
     try {
       await register(form.name, form.email, form.password, form.role);
-      toast.success('Account created! Welcome aboard 🎉');
+      toast.success('Account created! Welcome aboard');
       navigate('/');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Registration failed');
@@ -28,7 +28,10 @@ export default function Register() {
   return (
     <div className="auth-page">
       <div className="auth-card animate-slide-up">
-        <div className="auth-logo">⚡ TeamFlow</div>
+        <div className="auth-logo" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+          <Zap size={26} color="#818cf8" fill="#818cf8" />
+          <span>TeamFlow</span>
+        </div>
         <div className="auth-tagline">Unified Systems Engineering Platform</div>
 
         <h1 className="auth-title">Create your account</h1>

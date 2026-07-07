@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout/Layout';
 import { incidentsAPI, projectsAPI, authAPI } from '../services/api';
 import toast from 'react-hot-toast';
-import { Plus, X, Loader, AlertTriangle } from 'lucide-react';
+import { Plus, X, Loader, AlertTriangle, Clock, CheckCircle, Pencil, Trash2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useAuth } from '../context/AuthContext';
 
@@ -10,10 +10,10 @@ const SEVERITIES = ['low', 'medium', 'high', 'critical'];
 const STATUSES = ['open', 'investigating', 'resolved', 'escalated'];
 
 const SEVERITY_CONFIG = {
-  low: { color: '#4ade80', bg: 'rgba(34,197,94,0.1)', label: '🟢 Low' },
-  medium: { color: '#38bdf8', bg: 'rgba(14,165,233,0.1)', label: '🔵 Medium' },
-  high: { color: '#fb923c', bg: 'rgba(249,115,22,0.1)', label: '🟠 High' },
-  critical: { color: '#f87171', bg: 'rgba(239,68,68,0.1)', label: '🔴 Critical' },
+  low: { color: '#4ade80', bg: 'rgba(34,197,94,0.1)', label: 'Low' },
+  medium: { color: '#38bdf8', bg: 'rgba(14,165,233,0.1)', label: 'Medium' },
+  high: { color: '#fb923c', bg: 'rgba(249,115,22,0.1)', label: 'High' },
+  critical: { color: '#f87171', bg: 'rgba(239,68,68,0.1)', label: 'Critical' },
 };
 
 function IncidentModal({ incident, projects, users, onClose, onSave }) {
@@ -163,7 +163,7 @@ function IncidentDetailModal({ incident, onClose, onUpdate }) {
 
           {/* Investigation Timeline */}
           <div>
-            <div style={{ fontWeight: 600, marginBottom: 14, fontSize: 14 }}>🕐 Investigation Timeline</div>
+            <div style={{ fontWeight: 600, marginBottom: 14, fontSize: 14, display: 'flex', alignItems: 'center', gap: 6 }}><Clock size={15} /> Investigation Timeline</div>
             <div className="timeline" style={{ maxHeight: 200, overflowY: 'auto' }}>
               {incData.timeline?.map((t, i) => (
                 <div key={i} className="timeline-item">
@@ -185,7 +185,7 @@ function IncidentDetailModal({ incident, onClose, onUpdate }) {
                 </button>
                 {incData.status !== 'resolved' && (
                   <button id="resolve-incident-btn" type="button" className="btn btn-success btn-sm" onClick={handleResolve}>
-                    ✅ Mark Resolved
+                    <CheckCircle size={14} /> Mark Resolved
                   </button>
                 )}
               </div>
@@ -302,8 +302,8 @@ export default function Incidents() {
                     </div>
                   </div>
                   <div style={{ display: 'flex', gap: 6 }} onClick={e => e.stopPropagation()}>
-                    <button id={`edit-inc-${inc._id}`} className="btn btn-icon btn-secondary btn-sm" onClick={() => setModal(inc)}>✎</button>
-                    <button id={`del-inc-${inc._id}`} className="btn btn-icon btn-danger btn-sm" onClick={() => handleDelete(inc._id)}>🗑</button>
+                    <button id={`edit-inc-${inc._id}`} className="btn btn-icon btn-secondary btn-sm" onClick={() => setModal(inc)}><Pencil size={13} /></button>
+                    <button id={`del-inc-${inc._id}`} className="btn btn-icon btn-danger btn-sm" onClick={() => handleDelete(inc._id)}><Trash2 size={13} /></button>
                   </div>
                 </div>
               </div>

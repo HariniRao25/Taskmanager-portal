@@ -2,9 +2,8 @@ import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout/Layout';
 import { tasksAPI, projectsAPI, authAPI } from '../services/api';
 import toast from 'react-hot-toast';
-import { Plus, X, Loader, MessageSquare, Link2, AlertCircle } from 'lucide-react';
+import { Plus, X, Loader, MessageSquare, Link2, AlertCircle, Search, Calendar, Pencil, Trash2 } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
-import { useAuth } from '../context/AuthContext';
 
 const STATUSES = ['todo', 'in_progress', 'review', 'done', 'blocked', 'cancelled'];
 const PRIORITIES = ['low', 'medium', 'high', 'critical'];
@@ -121,8 +120,8 @@ function TaskModal({ task, projects, users, allTasks, onClose, onSave }) {
               style={{ minHeight: 80 }}>
               {availableTasks.map(t => <option key={t._id} value={t._id}>[{t.status}] {t.title}</option>)}
             </select>
-            <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4 }}>
-              ⚠️ Circular dependencies are automatically rejected
+            <div style={{ fontSize: 11, color: 'var(--text-muted)', marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}>
+              <AlertCircle size={12} /> Circular dependencies are automatically rejected
             </div>
           </div>
           <div className="form-group">
@@ -276,7 +275,6 @@ const KANBAN_COLUMNS = [
 ];
 
 export default function Tasks() {
-  const { user } = useAuth();
   const [tasks, setTasks] = useState([]);
   const [projects, setProjects] = useState([]);
   const [users, setUsers] = useState([]);
@@ -353,7 +351,7 @@ export default function Tasks() {
         </div>
         <div className="filter-bar" style={{ marginBottom: 0 }}>
           <div className="search-bar">
-            <span className="search-icon">🔍</span>
+            <span className="search-icon"><Search size={15} /></span>
             <input id="task-search" placeholder="Search tasks..." value={filter.search} onChange={e => setFilter({ ...filter, search: e.target.value })} />
           </div>
           <select id="task-project-filter" className="form-select" style={{ width: 160 }} value={filter.project} onChange={e => setFilter({ ...filter, project: e.target.value })}>
@@ -384,9 +382,9 @@ export default function Tasks() {
                     <span className={`badge badge-${task.priority}`}>{task.priority}</span>
                     <button
                       className="btn btn-icon"
-                      style={{ padding: 2, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)', fontSize: 10 }}
+                      style={{ padding: 2, background: 'none', border: 'none', cursor: 'pointer', color: 'var(--text-muted)' }}
                       onClick={e => { e.stopPropagation(); setModal(task); }}
-                    >✎</button>
+                    ><Pencil size={12} /></button>
                   </div>
                   <div className="kanban-card-title">{task.title}</div>
                   <div className="kanban-card-meta">
@@ -398,12 +396,12 @@ export default function Tasks() {
                     </div>
                   </div>
                   {task.dueDate && (
-                    <div style={{ fontSize: 10, color: new Date(task.dueDate) < new Date() ? '#f87171' : 'var(--text-muted)', marginTop: 6 }}>
-                      📅 {new Date(task.dueDate).toLocaleDateString()}
+                    <div style={{ fontSize: 10, color: new Date(task.dueDate) < new Date() ? '#f87171' : 'var(--text-muted)', marginTop: 6, display: 'flex', alignItems: 'center', gap: 4 }}>
+                      <Calendar size={10} /> {new Date(task.dueDate).toLocaleDateString()}
                     </div>
                   )}
                   {task.dependencies?.length > 0 && (
-                    <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 4 }}>🔗 {task.dependencies.length} deps</div>
+                    <div style={{ fontSize: 10, color: 'var(--text-muted)', marginTop: 4, display: 'flex', alignItems: 'center', gap: 4 }}><Link2 size={10} /> {task.dependencies.length} deps</div>
                   )}
                   {/* Quick status change */}
                   <select
@@ -442,7 +440,7 @@ export default function Tasks() {
                     <td>
                       <div style={{ fontWeight: 500, cursor: 'pointer', color: 'var(--primary-light)' }} onClick={() => setDetailTask(task)}>
                         {task.title}
-                        {task.dependencies?.length > 0 && <span style={{ fontSize: 10, marginLeft: 6, color: 'var(--text-muted)' }}>🔗{task.dependencies.length}</span>}
+                        {task.dependencies?.length > 0 && <span style={{ fontSize: 10, marginLeft: 6, color: 'var(--text-muted)', display: 'inline-flex', alignItems: 'center', gap: 2, verticalAlign: 'middle' }}><Link2 size={10} />{task.dependencies.length}</span>}
                       </div>
                     </td>
                     <td><span style={{ fontSize: 12, color: 'var(--text-muted)' }}>{task.project?.name}</span></td>
@@ -458,8 +456,8 @@ export default function Tasks() {
                     <td><span style={{ fontSize: 12, color: task.dueDate && new Date(task.dueDate) < new Date() ? '#f87171' : 'var(--text-muted)' }}>{task.dueDate ? new Date(task.dueDate).toLocaleDateString() : '—'}</span></td>
                     <td>
                       <div style={{ display: 'flex', gap: 4 }}>
-                        <button id={`edit-task-${task._id}`} className="btn btn-icon btn-secondary btn-sm" onClick={() => setModal(task)} title="Edit">✎</button>
-                        <button id={`del-task-${task._id}`} className="btn btn-icon btn-danger btn-sm" onClick={() => handleDelete(task._id)} title="Delete">🗑</button>
+                        <button id={`edit-task-${task._id}`} className="btn btn-icon btn-secondary btn-sm" onClick={() => setModal(task)} title="Edit"><Pencil size={13} /></button>
+                        <button id={`del-task-${task._id}`} className="btn btn-icon btn-danger btn-sm" onClick={() => handleDelete(task._id)} title="Delete"><Trash2 size={13} /></button>
                       </div>
                     </td>
                   </tr>

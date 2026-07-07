@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout/Layout';
 import { projectsAPI, authAPI } from '../services/api';
 import toast from 'react-hot-toast';
-import { Plus, Pencil, Trash2, Calendar, X, Loader } from 'lucide-react';
+import { Plus, Pencil, Trash2, Calendar, X, Loader, Search } from 'lucide-react';
 import { format } from 'date-fns';
 import { useAuth } from '../context/AuthContext';
 
@@ -10,10 +10,18 @@ const STATUSES = ['planning', 'active', 'on_hold', 'completed', 'archived'];
 const PRIORITIES = ['low', 'medium', 'high', 'critical'];
 
 function ProjectModal({ project, users, onClose, onSave }) {
-  const [form, setForm] = useState(project || {
-    name: '', description: '', status: 'planning', priority: 'medium',
-    members: [], startDate: '', endDate: '', tags: ''
-  });
+  const [form, setForm] = useState(
+    project
+      ? {
+          ...project,
+          // Members arrive populated as user objects; the <select> needs plain IDs.
+          members: (project.members || []).map((m) => m._id || m),
+        }
+      : {
+          name: '', description: '', status: 'planning', priority: 'medium',
+          members: [], startDate: '', endDate: '', tags: ''
+        }
+  );
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e) => {
@@ -135,7 +143,11 @@ export default function Projects() {
     return matchSearch && matchFilter;
   });
 
-  const canManage = user?.role === 'admin' || user?.role === 'project_manager';
+  // Anyone signed in can create a project (they become its owner).
+  // Editing/deleting a specific project is limited to its owner or an admin,
+  // matching what the backend controller enforces.
+  const canManageProject = (project) =>
+    user?.role === 'admin' || project.owner?._id === user?._id || project.owner === user?._id;
 
   return (
     <Layout title="Projects">
@@ -144,17 +156,15 @@ export default function Projects() {
           <h1 className="page-title">Projects</h1>
           <p className="page-subtitle">{projects.length} total projects</p>
         </div>
-        {canManage && (
-          <button id="create-project-btn" className="btn btn-primary" onClick={() => setModal('create')}>
-            <Plus size={16} /> New Project
-          </button>
-        )}
+        <button id="create-project-btn" className="btn btn-primary" onClick={() => setModal('create')}>
+          <Plus size={16} /> New Project
+        </button>
       </div>
 
       {/* Filters */}
       <div className="filter-bar">
         <div className="search-bar">
-          <span className="search-icon">🔍</span>
+          <span className="search-icon"><Search size={15} /></span>
           <input id="project-search" placeholder="Search projects..." value={search} onChange={e => setSearch(e.target.value)} />
         </div>
         <select id="project-status-filter" className="form-select" style={{ width: 160 }} value={filter} onChange={e => setFilter(e.target.value)}>
@@ -182,7 +192,7 @@ export default function Projects() {
                   <span className={`badge badge-${project.status}`}>{project.status.replace('_', ' ')}</span>
                   <span className={`badge badge-${project.priority}`} style={{ marginLeft: 6 }}>{project.priority}</span>
                 </div>
-                {canManage && (
+                {canManageProject(project) && (
                   <div style={{ display: 'flex', gap: 4 }}>
                     <button id={`edit-proj-${project._id}`} className="btn btn-icon btn-secondary" onClick={() => setModal(project)} title="Edit"><Pencil size={14} /></button>
                     <button id={`del-proj-${project._id}`} className="btn btn-icon btn-danger" onClick={() => handleDelete(project._id)} title="Delete"><Trash2 size={14} /></button>

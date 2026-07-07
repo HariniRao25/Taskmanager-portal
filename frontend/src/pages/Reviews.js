@@ -2,15 +2,15 @@ import React, { useEffect, useState } from 'react';
 import Layout from '../components/Layout/Layout';
 import { reviewsAPI, authAPI } from '../services/api';
 import toast from 'react-hot-toast';
-import { Star, CheckCircle, XCircle, RotateCcw, X, Loader } from 'lucide-react';
+import { Star, CheckCircle, XCircle, RotateCcw, X, Loader, MessageSquare, AlertTriangle } from 'lucide-react';
 import { formatDistanceToNow } from 'date-fns';
 import { useAuth } from '../context/AuthContext';
 
 const STATUS_BADGES = {
-  pending: { label: '⏳ Pending', color: '#38bdf8', bg: 'rgba(14,165,233,0.1)' },
-  approved: { label: '✅ Approved', color: '#4ade80', bg: 'rgba(34,197,94,0.1)' },
-  rejected: { label: '❌ Rejected', color: '#f87171', bg: 'rgba(239,68,68,0.1)' },
-  reassigned: { label: '🔁 Reassigned', color: '#c084fc', bg: 'rgba(168,85,247,0.1)' },
+  pending: { label: 'Pending', color: '#38bdf8', bg: 'rgba(14,165,233,0.1)' },
+  approved: { label: 'Approved', color: '#4ade80', bg: 'rgba(34,197,94,0.1)' },
+  rejected: { label: 'Rejected', color: '#f87171', bg: 'rgba(239,68,68,0.1)' },
+  reassigned: { label: 'Reassigned', color: '#c084fc', bg: 'rgba(168,85,247,0.1)' },
 };
 
 function ReviewActionModal({ review, onClose, onSave }) {
@@ -98,7 +98,8 @@ function ReassignModal({ review, users, onClose, onSave }) {
           <button className="btn btn-icon btn-secondary" onClick={onClose}><X size={18} /></button>
         </div>
         <div style={{ marginBottom: 16, padding: '10px 14px', background: 'rgba(249,115,22,0.08)', border: '1px solid rgba(249,115,22,0.2)', borderRadius: 8, fontSize: 13, color: '#fb923c' }}>
-          ⚠️ Business Rule: If a reviewer has been inactive for more than 7 days, the system auto-recommends the fallback reviewer.
+          <AlertTriangle size={13} style={{ display: 'inline', marginRight: 6, verticalAlign: 'middle' }} />
+          Business Rule: If a reviewer has been inactive for more than 7 days, the system auto-recommends the fallback reviewer.
           {review.fallbackReviewer && <div style={{ marginTop: 4, color: 'var(--text-secondary)' }}>Fallback: <strong>{review.fallbackReviewer.name}</strong></div>}
         </div>
         <form onSubmit={handleSubmit}>
@@ -107,7 +108,7 @@ function ReassignModal({ review, users, onClose, onSave }) {
             <select id="reassign-reviewer" className="form-select" value={newReviewerId} onChange={e => setNewReviewerId(e.target.value)} required>
               <option value="">Select reviewer</option>
               {review.fallbackReviewer && (
-                <option value={review.fallbackReviewer._id}>⭐ {review.fallbackReviewer.name} (Fallback)</option>
+                <option value={review.fallbackReviewer._id}>{review.fallbackReviewer.name} (Fallback)</option>
               )}
               {users.filter(u => u._id !== review.reviewer?._id && u._id !== review.fallbackReviewer?._id).map(u => (
                 <option key={u._id} value={u._id}>{u.name}</option>
@@ -209,12 +210,12 @@ export default function Reviews() {
                       {' · '} {formatDistanceToNow(new Date(review.createdAt), { addSuffix: true })}
                     </div>
                     {review.feedback && (
-                      <div style={{ marginTop: 8, padding: '8px 12px', background: 'var(--bg-3)', borderRadius: 6, fontSize: 13, color: 'var(--text-secondary)' }}>
-                        💬 {review.feedback}
+                      <div style={{ marginTop: 8, padding: '8px 12px', background: 'var(--bg-3)', borderRadius: 6, fontSize: 13, color: 'var(--text-secondary)', display: 'flex', alignItems: 'flex-start', gap: 6 }}>
+                        <MessageSquare size={13} style={{ flexShrink: 0, marginTop: 2 }} /> {review.feedback}
                       </div>
                     )}
                     {review.reassignReason && (
-                      <div style={{ marginTop: 6, fontSize: 12, color: '#fb923c' }}>🔁 {review.reassignReason}</div>
+                      <div style={{ marginTop: 6, fontSize: 12, color: '#fb923c', display: 'flex', alignItems: 'center', gap: 4 }}><RotateCcw size={12} /> {review.reassignReason}</div>
                     )}
                   </div>
                   {/* Actions */}

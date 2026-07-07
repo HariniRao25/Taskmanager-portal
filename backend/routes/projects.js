@@ -3,16 +3,18 @@ const router = express.Router();
 const {
   getProjects, getProject, createProject, updateProject, deleteProject, getProjectStats
 } = require('../controllers/projectController');
-const { protect, authorize } = require('../middleware/auth');
+const { protect } = require('../middleware/auth');
 
+// Any authenticated user can create a project (they become its owner).
+// updateProject/deleteProject enforce owner-or-admin access in the controller.
 router.route('/')
   .get(protect, getProjects)
-  .post(protect, authorize('admin', 'project_manager'), createProject);
+  .post(protect, createProject);
 
 router.route('/:id')
   .get(protect, getProject)
-  .put(protect, authorize('admin', 'project_manager'), updateProject)
-  .delete(protect, authorize('admin', 'project_manager'), deleteProject);
+  .put(protect, updateProject)
+  .delete(protect, deleteProject);
 
 router.get('/:id/stats', protect, getProjectStats);
 

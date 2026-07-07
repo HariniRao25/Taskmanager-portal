@@ -2,7 +2,7 @@ import React from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
 import {
   LayoutDashboard, FolderKanban, CheckSquare, AlertTriangle,
-  Bell, BarChart3, LogOut, Star, Shield
+  Bell, BarChart3, LogOut, Star, Shield, Zap
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useNotifications } from '../../context/NotificationContext';
@@ -41,7 +41,10 @@ export default function Sidebar() {
   return (
     <aside className="sidebar">
       <div className="sidebar-logo">
-        <div className="logo-text">⚡ TeamFlow</div>
+        <div className="logo-text" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Zap size={20} color="#818cf8" fill="#818cf8" />
+          <span>TeamFlow</span>
+        </div>
         <div className="logo-sub">Systems Engineering</div>
       </div>
 

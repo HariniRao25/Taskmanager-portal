@@ -2,19 +2,22 @@ import React from 'react';
 import Layout from '../components/Layout/Layout';
 import { useNotifications } from '../context/NotificationContext';
 import { formatDistanceToNow } from 'date-fns';
-import { Bell, Check, Trash2, CheckCheck } from 'lucide-react';
+import {
+  Bell, Check, Trash2, CheckCheck, ClipboardList, RefreshCw, Star,
+  CheckCircle, AlertTriangle, Clock, MessageSquare, Folder
+} from 'lucide-react';
 
 const TYPE_ICONS = {
-  task_assigned: '📋', status_changed: '🔄', review_requested: '⭐',
-  review_completed: '✅', incident_raised: '🚨', deadline_approaching: '⏰',
-  comment_added: '💬', project_update: '📁', general: '🔔',
+  task_assigned: ClipboardList, status_changed: RefreshCw, review_requested: Star,
+  review_completed: CheckCircle, incident_raised: AlertTriangle, deadline_approaching: Clock,
+  comment_added: MessageSquare, project_update: Folder, general: Bell,
 };
 
 const TYPE_COLORS = {
   task_assigned: '#818cf8', status_changed: '#38bdf8',
   review_requested: '#c084fc', review_completed: '#4ade80',
   incident_raised: '#f87171', deadline_approaching: '#fb923c',
-  comment_added: '#f59e0b', general: '#94a3b8',
+  comment_added: '#f59e0b', project_update: '#38bdf8', general: '#94a3b8',
 };
 
 export default function Notifications() {
@@ -91,11 +94,11 @@ function NotificationCard({ notification: n, onRead, onDelete }) {
     >
       <div style={{
         width: 40, height: 40, borderRadius: '50%', flexShrink: 0,
-        background: `${TYPE_COLORS[n.type]}22`,
+        background: `${TYPE_COLORS[n.type] || '#94a3b8'}22`,
+        color: TYPE_COLORS[n.type] || '#94a3b8',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
-        fontSize: 18,
       }}>
-        {TYPE_ICONS[n.type] || '🔔'}
+        {React.createElement(TYPE_ICONS[n.type] || Bell, { size: 18 })}
       </div>
 
       <div style={{ flex: 1 }}>

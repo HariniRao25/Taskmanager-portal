@@ -22,7 +22,7 @@ function PrivateRoute({ children }) {
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: 'var(--bg-0)' }}>
       <div style={{ textAlign: 'center' }}>
         <div style={{ fontSize: 24, fontWeight: 800, background: 'linear-gradient(135deg, #6366f1, #0ea5e9)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent', marginBottom: 12 }}>
-          ⚡ TeamFlow
+          TeamFlow
         </div>
         <div style={{ color: 'var(--text-muted)', fontSize: 13 }}>Loading...</div>
       </div>
